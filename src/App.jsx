@@ -5,9 +5,9 @@ import TodoList from './components/TodoList'
 
 function App() {
     const [todos, setTodos] = useState([
-        { id: 1, text: '할일' },
-        { id: 2, text: '할일' },
-        { id: 3, text: '할일' },
+        { id: 1, text: '할일', checked: true },
+        { id: 2, text: '할일', checked: false },
+        { id: 3, text: '할일', checked: false },
     ])
 
     let lastId = useRef(4)
@@ -16,6 +16,7 @@ function App() {
         const updateTodos = todos.concat({
             id: lastId.current,
             text,
+            checked: false,
         })
 
         setTodos(updateTodos)
@@ -27,11 +28,17 @@ function App() {
         setTodos(updateTodos)
     }
 
+    const onToggle = (id) => {
+        // 반환 할때 {} 생략시 리턴
+        const updateTodos = todos.map((todo) => (todo.id === id ? { ...todo, checked: !todo.checked } : todo))
+        setTodos(updateTodos)
+    }
+
     return (
         <>
             <TodoHeader />
             <TodoForm onInsert={onInsert} />
-            <TodoList todos={todos} onDelete={onDelete} />
+            <TodoList todos={todos} onDelete={onDelete} onToggle={onToggle} />
         </>
     )
 }
