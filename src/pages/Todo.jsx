@@ -1,14 +1,20 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TodoForm from '../components/TodoForm'
 import TodoHeader from '../components/TodoHeader'
 import TodoList from '../components/TodoList'
 
 function Todo() {
-    const [todos, setTodos] = useState([
-        { id: 1, text: '할일', checked: true },
-        { id: 2, text: '할일', checked: false },
-        { id: 3, text: '할일', checked: false },
-    ])
+    const [isLoding, setIsLoding] = useState(false)
+    const [todos, setTodos] = useState([])
+
+    useEffect(() => {
+        fetch('https://dummyjson.com/todos')
+            .then((res) => res.json())
+            .then((res) => {
+                setTodos(res.todos)
+                setIsLoding(true)
+            })
+    }, [])
 
     let lastId = useRef(4)
 
@@ -34,13 +40,19 @@ function Todo() {
         setTodos(updateTodos)
     }
 
-    return (
-        <>
-            <TodoHeader />
-            <TodoForm onInsert={onInsert} />
-            <TodoList todos={todos} onDelete={onDelete} onToggle={onToggle} />
-        </>
-    )
+    if (!isLoding) {
+        return <>Loding...</>
+    }
+
+    if (todos) {
+        return (
+            <>
+                <TodoHeader />
+                <TodoForm onInsert={onInsert} />
+                <TodoList todos={todos} onDelete={onDelete} onToggle={onToggle} />
+            </>
+        )
+    }
 }
 
 export default Todo
