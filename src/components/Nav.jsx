@@ -11,7 +11,10 @@ function Nav() {
                     <Link to="/todo">할일</Link>
                 </li>
                 <li>
-                    <Link to="content">컨텐츠</Link>
+                    <Link to="/content">컨텐츠</Link>
+                </li>
+                <li>
+                    <Link to="/random">할일 랜덤</Link>
                 </li>
             </ul>
         </>
